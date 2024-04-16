@@ -20,6 +20,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_cart;
     private double total;
-    @Transient
-    private List<Product> productList;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "cart_product_list")
+    private List<Long> id_product_list;
 }

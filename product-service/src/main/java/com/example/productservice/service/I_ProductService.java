@@ -11,4 +11,5 @@ public interface I_ProductService {
     public void editProduct(Long id_product, Product product);
     public List<Product> getAllProducts();
     public Product getProduct(Long id_product);
+    public Product getProductByName(String name);
 }

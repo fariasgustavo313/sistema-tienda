@@ -42,4 +42,9 @@ public class ProductService implements I_ProductService {
     public Product getProduct(Long id_product) {
         return productRepository.findById(id_product).orElse(null);
     }
+
+    @Override
+    public Product getProductByName(String name) {
+        return productRepository.getProductByName(name);
+    }
 }

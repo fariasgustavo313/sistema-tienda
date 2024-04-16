@@ -22,5 +22,5 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_sale;
     private LocalDate date;
-    private Cart cart;
+    private Long id_cart;
 }

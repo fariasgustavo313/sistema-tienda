@@ -1,8 +1,6 @@
-package com.example.saleservice.model;
+package com.example.cartservice.dto;
 
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.FetchType;
+import com.example.cartservice.model.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +12,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cart {
+public class CartDTO {
 
     private Long id_cart;
     private double total;
-    private List<Long> id_product_list;
+    private List<Product> product_list;
 }

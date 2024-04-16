@@ -42,4 +42,9 @@ public class ProductController {
     public Product getProduct(@PathVariable Long id_product) {
         return interProduct.getProduct(id_product);
     }
+
+    @GetMapping("/get/{name}")
+    public Product getProductByName(@PathVariable String name) {
+        return interProduct.getProductByName(name);
+    }
 }

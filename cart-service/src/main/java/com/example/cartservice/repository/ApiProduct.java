@@ -3,12 +3,11 @@ package com.example.cartservice.repository;
 import com.example.cartservice.model.Product;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "apiproduct", url = "http://localhost:8081/products")
 public interface ApiProduct {
 
-    @GetMapping()
-    public List<Product> getAllProducts();
+    @GetMapping("/{id_product}")
+    public Product getProductById(@PathVariable Long id_product);
 }

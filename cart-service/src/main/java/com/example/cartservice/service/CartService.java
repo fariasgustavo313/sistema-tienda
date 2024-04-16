@@ -1,5 +1,6 @@
 package com.example.cartservice.service;
 
+import com.example.cartservice.dto.CartDTO;
 import com.example.cartservice.model.Cart;
 import com.example.cartservice.model.Product;
 import com.example.cartservice.repository.ApiProduct;
@@ -14,26 +15,22 @@ import java.util.List;
 public class CartService implements I_CartService {
 
     @Autowired
-    private CartRepository cartRepository;
-    @Autowired
     private ApiProduct apiProduct;
+    @Autowired
+    private CartRepository cartRepository;
 
     @Override
     public void addCart(Cart cart) {
-        List<Product> productListApi = apiProduct.getAllProducts();
-        List<Product> newCartList = new ArrayList<>();
+        List<Long> new_id_product_list = new ArrayList<>();
         double subtotal = 0;
 
-        for (Product productCart : cart.getProductList()) {
-            for (Product productApi : productListApi) {
-                if (productCart.equals(productApi)) {
-                    newCartList.add(productCart);
-                    subtotal += productCart.getPrice();
-                }
-            }
+        for (Long id_product : cart.getId_product_list()) {
+            Product product = apiProduct.getProductById(id_product);
+            new_id_product_list.add(product.getId_product());
+            subtotal += product.getPrice();
         }
         Cart ct = new Cart();
-        ct.setProductList(newCartList);
+        ct.setId_product_list(new_id_product_list);
         ct.setTotal(subtotal);
 
         cartRepository.save(ct);
@@ -47,8 +44,18 @@ public class CartService implements I_CartService {
     @Override
     public void editCart(Long id_cart, Cart cart) {
         Cart ct = this.getCart(id_cart);
-        ct.setProductList(cart.getProductList());
-        ct.setTotal(cart.getTotal());
+
+        List<Long> new_id_product_list = new ArrayList<>();
+        double subtotal = 0;
+
+        for (Long id_product : cart.getId_product_list()) {
+            Product product = apiProduct.getProductById(id_product);
+            new_id_product_list.add(product.getId_product());
+            subtotal += product.getPrice();
+        }
+
+        ct.setId_product_list(new_id_product_list);
+        ct.setTotal(subtotal);
 
         cartRepository.save(ct);
     }

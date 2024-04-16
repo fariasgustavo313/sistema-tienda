@@ -23,14 +23,6 @@ Este proyecto es una API desarrollada en Java utilizando la arquitectura de micr
 - **Config Server**: Servidor centralizado para la gestión de la configuración de los microservicios.
 - **Docker**: Contenerización de la aplicación para una fácil implementación y administración.
 
-## Instalación y Uso
-
-1. Clona este repositorio en tu máquina local.
-2. Asegúrate de tener Docker instalado en tu sistema.
-3. Configura las propiedades de la base de datos en el archivo `application.properties`.
-4. Ejecuta el comando `docker-compose up` para construir y ejecutar la aplicación en contenedores Docker.
-5. La API estará disponible en `http://localhost:8080`.
-
 ## Contacto
 
 Si tienes alguna pregunta o sugerencia, no dudes en contactarme:

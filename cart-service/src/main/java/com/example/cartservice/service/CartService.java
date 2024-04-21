@@ -5,6 +5,8 @@ import com.example.cartservice.model.Cart;
 import com.example.cartservice.model.Product;
 import com.example.cartservice.repository.ApiProduct;
 import com.example.cartservice.repository.CartRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +45,7 @@ public class CartService implements I_CartService {
 
     @Override
     public void editCart(Long id_cart, Cart cart) {
-        Cart ct = this.getCart(id_cart);
+        Cart ct = cartRepository.findById(id_cart).orElse(null);
 
         List<Long> new_id_product_list = new ArrayList<>();
         double subtotal = 0;
@@ -66,7 +68,31 @@ public class CartService implements I_CartService {
     }
 
     @Override
-    public Cart getCart(Long id_cart) {
-        return cartRepository.findById(id_cart).orElse(null);
+    @CircuitBreaker(name = "product-service", fallbackMethod = "fallbackGetProducts")
+    @Retry(name = "product-service")
+    public CartDTO getCart(Long id_cart) {
+
+        List<Product> productList = new ArrayList<>();
+        Cart cart = cartRepository.findById(id_cart).orElse(null);
+
+        for (Long id_product : cart.getId_product_list()) {
+            Product product = apiProduct.getProductById(id_product);
+            productList.add(product);
+        }
+        CartDTO cartDTO = new CartDTO();
+        cartDTO.setId_cart(id_cart);
+        cartDTO.setTotal(cart.getTotal());
+        cartDTO.setProduct_list(productList);
+
+        createExcepcion();
+        return cartDTO;
+    }
+
+    public CartDTO fallbackGetProducts(Throwable throwable) {
+        return new CartDTO(9999999L, 9999999, null);
+    }
+
+    public void createExcepcion() {
+        throw new IllegalArgumentException("Prueba Resilience y Circuit Breaker");
     }
 }

@@ -3,6 +3,7 @@ package com.example.productservice.controller;
 import com.example.productservice.model.Product;
 import com.example.productservice.service.I_ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,10 +14,13 @@ public class ProductController {
 
     @Autowired
     private I_ProductService interProduct;
+    @Value("${server.port}")
+    private int serverPort;
 
     @PostMapping
     public String addProduct(@RequestBody Product product) {
         interProduct.addProduct(product);
+        System.out.println("*********** ESTE ES EL PUERTO " + serverPort + " *************************");
         return "product successfully added";
     }
 
@@ -46,5 +50,10 @@ public class ProductController {
     @GetMapping("/get/{name}")
     public Product getProductByName(@PathVariable String name) {
         return interProduct.getProductByName(name);
+    }
+
+    @GetMapping("/prueba")
+    public String probarLoadBalancer() {
+        return "Este es el puerto " + serverPort;
     }
 }

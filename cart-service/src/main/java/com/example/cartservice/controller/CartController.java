@@ -6,6 +6,7 @@ import com.example.cartservice.model.Product;
 import com.example.cartservice.repository.ApiProduct;
 import com.example.cartservice.service.I_CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ import java.util.List;
 @RequestMapping("/carts")
 public class CartController {
 
+    @Value("${server.port}")
+    private int serverPort;
     @Autowired
     private ApiProduct apiProduct;
     @Autowired
@@ -46,16 +49,11 @@ public class CartController {
 
     @GetMapping("/{id_cart}")
     public CartDTO getCart(@PathVariable Long id_cart) {
-        List<Product> productList = new ArrayList<>();
-        Cart cart = interCart.getCart(id_cart);
-        for (Long id_product : cart.getId_product_list()) {
-            Product product = apiProduct.getProductById(id_product);
-            productList.add(product);
-        }
-        CartDTO cartDTO = new CartDTO();
-        cartDTO.setId_cart(id_cart);
-        cartDTO.setTotal(cart.getTotal());
-        cartDTO.setProduct_list(productList);
-        return cartDTO;
+        return interCart.getCart(id_cart);
+    }
+
+    @GetMapping("/prueba")
+    public String probarLoadBalancer() {
+        return "Este es el puerto " + serverPort;
     }
 }
